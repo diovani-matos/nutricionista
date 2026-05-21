@@ -61,9 +61,25 @@ nutricionista/
 ### Instalação
 
 ```bash
-git clone https://github.com/SEU_USUARIO/nutricionista.git
+git clone https://github.com/<seu-usuario>/nutricionista.git
 cd nutricionista
 npm install
+```
+
+### Publicar no GitHub (primeira vez)
+
+Se o repositório remoto ainda não existir:
+
+```bash
+gh auth login
+gh repo create nutricionista --public --source=. --remote=origin --push
+```
+
+Ou crie o repositório em [github.com/new](https://github.com/new) e depois:
+
+```bash
+git remote add origin https://github.com/<seu-usuario>/nutricionista.git
+git push -u origin master
 ```
 
 ### Desenvolvimento
