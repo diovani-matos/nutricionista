@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Award, CheckCircle, Heart, Leaf } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/BrandIcons";
 import { IMAGES } from "@/lib/images";
 
 const ease = [0.4, 0, 0.2, 1] as const;
@@ -66,7 +67,8 @@ export default function Hero() {
           </motion.p>
           <motion.div className="hero-ctas" variants={fadeUp}>
             <Link href="#contato" className="btn btn-primary btn-lg">
-              Quero agendar uma consulta →
+              <WhatsAppIcon width={18} height={18} aria-hidden />
+              Quero agendar uma consulta
             </Link>
             <Link href="#abordagem" className="btn btn-outline btn-lg">
               Como funciona

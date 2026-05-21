@@ -10,6 +10,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { StaggerContainer, StaggerItem } from "@/components/motion/Stagger";
 
@@ -76,6 +77,110 @@ const dores: DorItem[] = [
   },
 ];
 
+function DorCard({ dor }: { dor: DorItem }) {
+  const Icon = dor.icon;
+  return (
+    <motion.div
+      className="dor-card"
+      whileHover={{ y: -4, transition: { duration: 0.25 } }}
+    >
+      <div className={`dor-icon ${dor.iconClass}`}>
+        <Icon width={22} height={22} aria-hidden />
+      </div>
+      <h3>{dor.title}</h3>
+      <p>{dor.description}</p>
+    </motion.div>
+  );
+}
+
+function DoresCarousel({ items }: { items: DorItem[] }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const updateActiveIndex = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const slides = track.querySelectorAll<HTMLElement>("[data-slide]");
+    const trackCenter = track.scrollLeft + track.clientWidth / 2;
+
+    let closest = 0;
+    let minDistance = Infinity;
+
+    slides.forEach((slide, index) => {
+      const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+      const distance = Math.abs(trackCenter - slideCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closest = index;
+      }
+    });
+
+    setActiveIndex(closest);
+  }, []);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    updateActiveIndex();
+    track.addEventListener("scroll", updateActiveIndex, { passive: true });
+    window.addEventListener("resize", updateActiveIndex);
+
+    return () => {
+      track.removeEventListener("scroll", updateActiveIndex);
+      window.removeEventListener("resize", updateActiveIndex);
+    };
+  }, [updateActiveIndex]);
+
+  const scrollTo = (index: number) => {
+    const track = trackRef.current;
+    const slide = track?.querySelector<HTMLElement>(`[data-slide="${index}"]`);
+    if (!slide || !track) return;
+
+    const offset =
+      slide.offsetLeft - (track.clientWidth - slide.offsetWidth) / 2;
+
+    track.scrollTo({ left: offset, behavior: "smooth" });
+    setActiveIndex(index);
+  };
+
+  return (
+    <div className="dores-carousel" aria-roledescription="carousel">
+      <div
+        ref={trackRef}
+        className="dores-carousel-track"
+        aria-live="polite"
+      >
+        {items.map((dor, index) => (
+          <div
+            key={dor.title}
+            className="dores-carousel-slide"
+            data-slide={index}
+            aria-roledescription="slide"
+            aria-label={`${index + 1} de ${items.length}`}
+          >
+            <DorCard dor={dor} />
+          </div>
+        ))}
+      </div>
+      <div className="dores-carousel-dots" role="tablist" aria-label="Cards">
+        {items.map((dor, index) => (
+          <button
+            key={dor.title}
+            type="button"
+            role="tab"
+            className={`dores-carousel-dot${index === activeIndex ? " is-active" : ""}`}
+            aria-label={`Ir para o card ${index + 1}`}
+            aria-selected={index === activeIndex}
+            onClick={() => scrollTo(index)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Dores() {
   return (
     <section className="dores" id="dores">
@@ -92,25 +197,16 @@ export default function Dores() {
             — e isso tem solução.
           </p>
         </Reveal>
-        <StaggerContainer className="dores-grid" stagger={0.08}>
-          {dores.map((dor) => {
-            const Icon = dor.icon;
-            return (
-              <StaggerItem key={dor.title}>
-                <motion.div
-                  className="dor-card"
-                  whileHover={{ y: -4, transition: { duration: 0.25 } }}
-                >
-                  <div className={`dor-icon ${dor.iconClass}`}>
-                    <Icon width={22} height={22} aria-hidden />
-                  </div>
-                  <h3>{dor.title}</h3>
-                  <p>{dor.description}</p>
-                </motion.div>
-              </StaggerItem>
-            );
-          })}
+
+        <StaggerContainer className="dores-grid dores-grid--desktop" stagger={0.08}>
+          {dores.map((dor) => (
+            <StaggerItem key={dor.title}>
+              <DorCard dor={dor} />
+            </StaggerItem>
+          ))}
         </StaggerContainer>
+
+        <DoresCarousel items={dores} />
       </div>
     </section>
   );

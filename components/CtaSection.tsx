@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { WhatsAppIcon } from "@/components/icons/BrandIcons";
 import { Reveal } from "@/components/motion/Reveal";
+import { siteConfig } from "@/lib/site";
 
 export default function CtaSection() {
   return (
@@ -21,7 +23,7 @@ export default function CtaSection() {
         </Reveal>
         <Reveal delay={0.2}>
           <motion.a
-            href="https://wa.me/5511999999999"
+            href={siteConfig.whatsappUrl}
             className="btn btn-white btn-lg"
             target="_blank"
             rel="noopener noreferrer"
@@ -29,7 +31,8 @@ export default function CtaSection() {
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.2 }}
           >
-            💬 Agendar pelo WhatsApp
+            <WhatsAppIcon width={18} height={18} aria-hidden />
+            Agendar pelo WhatsApp
           </motion.a>
           <p className="cta-footnote">
             Atendimento online para todo o Brasil · Presencial em São Paulo/SP

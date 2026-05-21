@@ -97,17 +97,26 @@ npm run build
 npm start
 ```
 
-### Lint
+### Lint e checagem de tipos
 
 ```bash
 npm run lint
+npm run typecheck
+```
+
+### Variáveis de ambiente
+
+Copie `.env.example` para `.env.local` e ajuste antes do deploy:
+
+```bash
+cp .env.example .env.local
 ```
 
 ## Personalização rápida
 
 | O quê | Onde alterar |
 |-------|----------------|
-| WhatsApp | `components/CtaSection.tsx` — link `wa.me` |
+| WhatsApp e redes | `.env` — veja `.env.example` e `lib/site.ts` |
 | Imagens | `lib/images.ts` — IDs do Unsplash |
 | Textos e depoimentos | Componentes em `components/` |
 | Cores | Variáveis em `app/globals.css` (`:root`) |

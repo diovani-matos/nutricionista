@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { Camera, MessageCircle, Play } from "lucide-react";
+import {
+  InstagramIcon,
+  WhatsAppIcon,
+  YoutubeIcon,
+} from "@/components/icons/BrandIcons";
+import { siteConfig } from "@/lib/site";
 
 const navLinks = [
   { href: "#dores", label: "Você se identifica?" },
@@ -7,7 +12,7 @@ const navLinks = [
   { href: "#sobre", label: "Sobre a Dra. Ana Luz" },
   { href: "#depoimentos", label: "Depoimentos" },
   { href: "#contato", label: "Agendar consulta" },
-];
+] as const;
 
 const especialidades = [
   "Nutrição para TEA",
@@ -15,7 +20,25 @@ const especialidades = [
   "Seletividade alimentar",
   "Neurodesenvolvimento",
   "Suplementação funcional",
-];
+] as const;
+
+const socialLinks = [
+  {
+    href: siteConfig.social.instagram,
+    label: "Instagram",
+    Icon: InstagramIcon,
+  },
+  {
+    href: siteConfig.social.youtube,
+    label: "YouTube",
+    Icon: YoutubeIcon,
+  },
+  {
+    href: siteConfig.social.whatsapp || siteConfig.whatsappUrl,
+    label: "WhatsApp",
+    Icon: WhatsAppIcon,
+  },
+].filter((link) => link.href.length > 0);
 
 export default function Footer() {
   return (
@@ -28,17 +51,22 @@ export default function Footer() {
               Nutrição funcional materno-infantil especializada em crianças com
               TEA, TDAH e seletividade alimentar. Ciência e acolhimento juntos.
             </p>
-            <div className="social-links">
-              <a href="#" className="social-link" aria-label="Instagram">
-                <Camera width={16} height={16} aria-hidden />
-              </a>
-              <a href="#" className="social-link" aria-label="YouTube">
-                <Play width={16} height={16} aria-hidden />
-              </a>
-              <a href="#" className="social-link" aria-label="WhatsApp">
-                <MessageCircle width={16} height={16} aria-hidden />
-              </a>
-            </div>
+            {socialLinks.length > 0 && (
+              <div className="social-links">
+                {socialLinks.map(({ href, label, Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    className="social-link"
+                    aria-label={label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Icon width={16} height={16} aria-hidden />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
           <div className="footer-col">
             <h4>Navegação</h4>
@@ -54,9 +82,7 @@ export default function Footer() {
             <h4>Especialidades</h4>
             <ul>
               {especialidades.map((item) => (
-                <li key={item}>
-                  <Link href="#">{item}</Link>
-                </li>
+                <li key={item}>{item}</li>
               ))}
             </ul>
           </div>
