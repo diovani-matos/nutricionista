@@ -6,7 +6,7 @@ export const siteConfig = {
   title: "Dra. Ana Luz | Nutrição Funcional para Crianças Atípicas",
   description:
     "Especialista em crianças com TEA, TDAH e Seletividade Alimentar. Nutrição funcional materno-infantil com ciência e acolhimento.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://nutricionista-ivory.vercel.app",
   whatsappUrl: `https://wa.me/${whatsappNumber.replace(/\D/g, "")}`,
   social: {
     instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "",
