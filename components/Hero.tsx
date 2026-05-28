@@ -167,6 +167,7 @@ export default function Hero() {
                 display: "flex",
                 alignItems: "center",
                 gap: "0.4rem",
+                whiteSpace: "nowrap",
               }}
             >
               <CheckCircle
@@ -195,6 +196,7 @@ export default function Hero() {
                 display: "flex",
                 alignItems: "center",
                 gap: "0.35rem",
+                whiteSpace: "nowrap",
               }}
             >
               <CheckCircle width={13} height={13} aria-hidden />
@@ -213,6 +215,7 @@ export default function Hero() {
                 display: "flex",
                 alignItems: "center",
                 gap: "0.35rem",
+                whiteSpace: "nowrap",
               }}
             >
               <CheckCircle width={13} height={13} aria-hidden />
