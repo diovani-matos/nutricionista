@@ -47,8 +47,7 @@ const dores: DorItem[] = [
   {
     icon: ScanFace,
     iconClass: "ic-green",
-    title:
-      '"Ele não suporta texturas, cheiros ou a comida se misturando."',
+    title: '"Ele não suporta texturas, cheiros ou a comida se misturando."',
     description:
       "Sensibilidades sensoriais que outros não entendem e que excluem seu filho de almoços em família e festas de aniversário.",
   },
@@ -77,22 +76,76 @@ const dores: DorItem[] = [
   },
 ];
 
+/* ── Card de dor ─────────────────────────────────────────────────── */
 function DorCard({ dor }: { dor: DorItem }) {
   const Icon = dor.icon;
+  const [hovered, setHovered] = useState(false);
+
   return (
     <motion.div
       className="dor-card"
+      style={{
+        backgroundColor: "var(--color-bg-card)",
+        border: "1px solid var(--color-border)",
+        borderRadius: "10px",
+        padding: "1.75rem",
+        boxShadow: hovered
+          ? "0 8px 24px rgba(45,74,107,0.12)"
+          : "0 2px 8px rgba(45,74,107,0.06)",
+        transition: "box-shadow 0.25s ease",
+      }}
       whileHover={{ y: -4, transition: { duration: 0.25 } }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
     >
-      <div className={`dor-icon ${dor.iconClass}`}>
-        <Icon width={22} height={22} aria-hidden />
+      {/* 5 · Ícone unificado */}
+      <div
+        className="dor-icon"
+        style={{
+          backgroundColor: "var(--color-primary-light)",
+          borderRadius: "8px",
+          padding: "0.5rem",
+          width: "40px",
+          height: "40px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Icon
+          width={20}
+          height={20}
+          aria-hidden
+          style={{ color: "var(--color-primary)" }}
+        />
       </div>
-      <h3>{dor.title}</h3>
-      <p>{dor.description}</p>
+
+      {/* 6 · Título do card */}
+      <h3
+        style={{
+          color: "var(--color-heading)",
+          fontWeight: 600,
+          fontSize: "0.95rem",
+        }}
+      >
+        {dor.title}
+      </h3>
+
+      {/* 7 · Descrição do card */}
+      <p
+        style={{
+          color: "var(--color-muted)",
+          fontSize: "0.875rem",
+          lineHeight: 1.7,
+        }}
+      >
+        {dor.description}
+      </p>
     </motion.div>
   );
 }
 
+/* ── Carrossel mobile ─────────────────────────────────────────────── */
 function DoresCarousel({ items }: { items: DorItem[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -164,6 +217,8 @@ function DoresCarousel({ items }: { items: DorItem[] }) {
           </div>
         ))}
       </div>
+
+      {/* 8 · Dots com cores do novo sistema */}
       <div className="dores-carousel-dots" role="tablist" aria-label="Cards">
         {items.map((dor, index) => (
           <button
@@ -171,6 +226,12 @@ function DoresCarousel({ items }: { items: DorItem[] }) {
             type="button"
             role="tab"
             className={`dores-carousel-dot${index === activeIndex ? " is-active" : ""}`}
+            style={{
+              backgroundColor:
+                index === activeIndex
+                  ? "var(--color-primary)"
+                  : "var(--color-border)",
+            }}
             aria-label={`Ir para o card ${index + 1}`}
             aria-selected={index === activeIndex}
             onClick={() => scrollTo(index)}
@@ -181,24 +242,54 @@ function DoresCarousel({ items }: { items: DorItem[] }) {
   );
 }
 
+/* ── Seção principal ──────────────────────────────────────────────── */
 export default function Dores() {
   return (
-    <section className="dores" id="dores">
+    <section
+      className="dores"
+      id="dores"
+      style={{ backgroundColor: "var(--color-bg-alt)" }}
+    >
       <div className="container">
         <Reveal>
-          <div className="section-tag">Você se identifica?</div>
-          <h2 className="section-title">
+          {/* 9 · Tag da seção */}
+          <div
+            className="section-tag"
+            style={{
+              backgroundColor: "var(--color-accent-light)",
+              color: "var(--color-accent)",
+              border: "1px solid var(--color-accent)",
+              borderRadius: "999px",
+            }}
+          >
+            Você se identifica?
+          </div>
+
+          {/* 2 · Título */}
+          <h2
+            className="section-title"
+            style={{ color: "var(--color-heading)" }}
+          >
             Se você chegou até aqui,
             <br />
             provavelmente já viveu isso...
           </h2>
-          <p className="section-subtitle">
+
+          {/* 3 · Subtítulo */}
+          <p
+            className="section-subtitle"
+            style={{ color: "var(--color-muted)" }}
+          >
             Muitas mães passam anos nessa luta silenciosa. Você não está sozinha
             — e isso tem solução.
           </p>
         </Reveal>
 
-        <StaggerContainer className="dores-grid dores-grid--desktop" stagger={0.08}>
+        {/* Grid desktop */}
+        <StaggerContainer
+          className="dores-grid dores-grid--desktop"
+          stagger={0.08}
+        >
           {dores.map((dor) => (
             <StaggerItem key={dor.title}>
               <DorCard dor={dor} />
@@ -206,6 +297,7 @@ export default function Dores() {
           ))}
         </StaggerContainer>
 
+        {/* Carrossel mobile */}
         <DoresCarousel items={dores} />
       </div>
     </section>

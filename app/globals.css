@@ -7,19 +7,34 @@
 }
 
 :root {
-  --sage: #7a9e7e;
-  --sage-light: #e8f0e9;
-  --sage-dark: #4f7052;
-  --off-white: #f7f6f2;
-  --aqua: #52b8c8;
-  --aqua-light: #e3f4f7;
-  --aqua-dark: #3a9aab;
-  --blue: #7aa3bf;
-  --blue-light: #e8f2f7;
-  --text: #2d2d2d;
-  --text-muted: #6b7280;
-  --text-light: #9ca3af;
-  --white: #ffffff;
+  /* Cores principais */
+  --color-primary: #2D4A6B;
+  --color-primary-hover: #1A2E42;
+  --color-primary-medium: #4A7FA5;
+  --color-primary-light: #E8F4F8;
+
+  /* Fundos */
+  --color-bg: #F7F3EE;
+  --color-bg-alt: #EEE9E2;
+  --color-bg-card: #FFFFFF;
+
+  /* Textos */
+  --color-heading: #1A2E42;
+  --color-text: #374151;
+  --color-muted: #6B7280;
+
+  /* Acento */
+  --color-accent: #5C8A6B;
+  --color-accent-light: #EBF3EE;
+
+  /* Bordas */
+  --color-border: #DDD8D0;
+
+  /* Feedback */
+  --color-success: #5C8A6B;
+  --color-error: #DC2626;
+
+  /* Estruturais */
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
   --r: 16px;
   --r-lg: 24px;
@@ -31,8 +46,8 @@ html {
 
 body {
   font-family: "Segoe UI", system-ui, sans-serif;
-  background: var(--off-white);
-  color: var(--text);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   line-height: 1.65;
   font-size: 16px;
 }
@@ -106,6 +121,44 @@ nav {
 .nav-links a:hover,
 .nav-links a:focus-visible {
   color: var(--text);
+}
+
+/* ── nav-link: underline animado ── */
+a.nav-link {
+  position: relative;
+  color: var(--color-muted);
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+a.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background-color: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+a.nav-link:hover,
+a.nav-link:focus-visible {
+  color: var(--color-primary);
+}
+
+a.nav-link:hover::after,
+a.nav-link:focus-visible::after {
+  width: 100%;
+}
+
+a.nav-link.active {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+a.nav-link.active::after {
+  width: 100%;
 }
 
 .btn {

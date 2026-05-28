@@ -15,6 +15,7 @@ const navItems = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   const toggleMenu = useCallback(() => setMenuOpen((open) => !open), []);
@@ -42,32 +43,76 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [menuOpen, closeMenu]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const spanColor = menuOpen ? "var(--color-primary)" : "var(--color-muted)";
+
   return (
     <motion.nav
       className={menuOpen ? "nav--open" : undefined}
+      style={{
+        backgroundColor: "var(--color-bg)",
+        boxShadow: scrolled
+          ? "0 1px 12px rgba(45, 74, 107, 0.08)"
+          : "none",
+        transition: "box-shadow 0.3s ease",
+      }}
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease }}
     >
       <div className="nav-inner">
-        <Link href="/" className="logo" onClick={closeMenu}>
-          Ana Luz<span> Nutrição</span>
+        {/* ── Logo ── */}
+        <Link
+          href="/"
+          className="logo"
+          onClick={closeMenu}
+          style={{ color: "var(--color-heading)" }}
+        >
+          Ana Luz<span style={{ color: "var(--color-primary)" }}> Nutrição</span>
         </Link>
 
+        {/* ── Links de navegação (desktop) ── */}
         <ul className="nav-links">
           {navItems.map((item) => (
             <li key={item.href}>
-              <Link href={item.href}>{item.label}</Link>
+              <Link href={item.href} className="nav-link">
+                {item.label}
+              </Link>
             </li>
           ))}
         </ul>
 
+        {/* ── CTA desktop ── */}
         <div className="nav-actions">
-          <Link href="#contato" className="btn btn-primary btn-nav-desktop">
+          <Link
+            href="#contato"
+            className="btn btn-nav-desktop"
+            style={{
+              backgroundColor: "var(--color-primary)",
+              color: "#FFFFFF",
+              borderRadius: "6px",
+              padding: "0.5rem 1.25rem",
+              transition: "background-color 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+                "var(--color-primary-hover)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+                "var(--color-primary)";
+            }}
+          >
             📅 Agendar Consulta
           </Link>
         </div>
 
+        {/* ── Hambúrguer ── */}
         <button
           type="button"
           className={`hamburger${menuOpen ? " hamburger--open" : ""}`}
@@ -76,12 +121,13 @@ export default function Header() {
           aria-controls="mobile-menu"
           onClick={toggleMenu}
         >
-          <span />
-          <span />
-          <span />
+          <span style={{ backgroundColor: spanColor }} />
+          <span style={{ backgroundColor: spanColor }} />
+          <span style={{ backgroundColor: spanColor }} />
         </button>
       </div>
 
+      {/* ── Menu mobile ── */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -105,6 +151,7 @@ export default function Header() {
             />
             <motion.div
               className="mobile-menu-panel"
+              style={{ backgroundColor: "var(--color-bg)" }}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
@@ -118,7 +165,11 @@ export default function Header() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.05 + index * 0.05, duration: 0.3 }}
                   >
-                    <Link href={item.href} onClick={closeMenu}>
+                    <Link
+                      href={item.href}
+                      className="nav-link"
+                      onClick={closeMenu}
+                    >
                       {item.label}
                     </Link>
                   </motion.li>
@@ -131,8 +182,23 @@ export default function Header() {
               >
                 <Link
                   href="#contato"
-                  className="btn btn-primary btn-nav-mobile"
+                  className="btn btn-nav-mobile"
                   onClick={closeMenu}
+                  style={{
+                    backgroundColor: "var(--color-primary)",
+                    color: "#FFFFFF",
+                    borderRadius: "6px",
+                    padding: "0.5rem 1.25rem",
+                    transition: "background-color 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+                      "var(--color-primary-hover)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+                      "var(--color-primary)";
+                  }}
                 >
                   📅 Agendar Consulta
                 </Link>
