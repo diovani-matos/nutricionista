@@ -257,8 +257,8 @@ export default function Hero() {
               }}
             >
               <Image
-                src="/images/hero-mae-filho.jpg"
-                alt="Mãe e criança em um momento acolhedor durante a refeição"
+                src="/images/sobre-nutricionista.jpg"
+                alt="Dra. Ana Luz Ferreira — Nutricionista"
                 fill
                 priority
                 quality={90}
